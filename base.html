@@ -1,0 +1,67 @@
+<!-- 天氣資訊 -->
+<script type="text/javascript">
+    function GetWeather() {
+        var Authorization = 'CWB-124CC074-AED6-4C49-98A0-88AA734FD501'
+        var StationName = '%E8%A5%BF%E5%B1%AF';
+        var weather_api = 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=' +
+            Authorization + '&StationName=' + StationName + '&elementName=WDSD,TEMP,HUMD'
+        axios.get(weather_api)
+            .then((response) => {
+                if (response.status == 200) {
+                    let city = response.data.records.Station[0].GeoInfo.CountyName;
+                    let region = response.data.records.Station[0].GeoInfo.TownName;
+                    let wdsd = response.data.records.Station[0].WeatherElement.WindSpeed;
+                    let temp = response.data.records.Station[0].WeatherElement.AirTemperature;
+                    let humd = response.data.records.Station[0].WeatherElement.RelativeHumidity;
+                    let weather = response.data.records.Station[0].WeatherElement.Weather;
+
+                    // console.log('城市 (CountyName) - ' + city);
+                    // console.log('區域 (TownName) - ' + region);
+                    // console.log('風速 (WindSpeed) - ' + wdsd);
+                    // console.log('溫度 (AirTemperature) - ' + temp);
+                    // console.log('濕度 (RelativeHumidity) - ' + humd);
+                    // console.log('氣候 (Weather) - ' + weather);
+
+                    if (humd >= 99) {
+                        var icon = '<i class="fas fa-cloud-showers-heavy"></i>'
+                    } else if (humd < 99 && humd >= 80) {
+                        var icon = '<i class="fas fa-cloud-rain"></i>'
+                    } else if (humd < 80 && humd >= 70) {
+                        var icon = '<i class="fas fa-smog"></i>'
+                    } else if (humd < 70 && humd >= 60) {
+                        var icon = '<i class="fas fa-cloud-sun"></i>'
+                    } else {
+                        if (temp > 23) {
+                            var icon = '<i class="fas fa-sun"></i>'
+                        } else if (temp < 18) {
+                            var icon = '<i class="fas fa-snowflake"></i>'
+                        } else {
+                            if (wdsd > 1.6) {
+                                var icon = '<i class="fas fa-wind"></i>'
+                            } else {
+                                var icon = '<i class="fas fa-cloud-sun"></i>'
+                            }
+                        }
+                    }
+
+                    document.getElementById('weather_error').style.display = 'none';
+                    document.getElementById('place').innerHTML =
+                        '<i class="fa fa-map-pin" aria-hidden="true"></i>&nbsp;&nbsp;' + city + ' ' + region;
+                    document.getElementById('temp').innerHTML = icon + '&nbsp;&nbsp;' + temp + '°C';
+                    document.getElementById('wdsd').innerHTML = '風速：' + wdsd + '公尺/秒';
+                    document.getElementById('humd').innerHTML = '濕度：' + humd.toFixed(1).toString() + '%';
+                } else {
+                    // console.log('Weather error !');
+                    document.getElementById('weather_error').style.display = 'block';
+                    document.getElementById('place').innerHTML =
+                        '<i class="fa fa-map-pin" aria-hidden="true"></i>&nbsp;&nbsp;' + '臺中市' + ' ' + '西屯區';
+                    // document.getElementById('temp').innerHTML = '<i class="fas fa-smog"></i>' + '&nbsp;&nbsp;' + '20.5' + '°C';
+                    // document.getElementById('wdsd').innerHTML = '風速：' + '0.9' + '公尺/秒';
+                    // document.getElementById('humd').innerHTML = '濕度：' + '78' + '%'; 
+                }
+            })
+            .catch((error) => {
+                console.log('LoadWeather error -', error);
+            });
+    }
+</script>
