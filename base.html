@@ -1,10 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="../media/images/sidadun-ico.png">
+
+    <!-- Custom Stylesheet -->
+    <link href="../media/css/style.css" rel="stylesheet">
+    <link href="../media/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css">
+    <link href="../media/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet" />
+    <link href="../media/plugins/tabulator/tabulator_bootstrap4.min.css" rel="stylesheet" />
+
+    <script src="../media/plugins/vue/vue.min.js"></script>
+    <script src="../media/plugins/axios/axios.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.1/echarts.min.js"></script>
+
+    <style>
+        [data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .nav-header .brand-logo a {
+            padding: 1.5rem 1.0625rem;
+        }
+
+        .nav-header .brand-logo a {
+            padding: 1.4rem 1.65rem;
+        }
+
+        [data-nav-headerbg="color_1"] .nav-header {
+            background-color: #866E61;
+        }
+
+        .nk-sidebar .metismenu a:hover,
+        .nk-sidebar .metismenu a:active,
+        .nk-sidebar .metismenu a.active {
+            background-color: #e6dbd7;
+        }
+
+        .nk-sidebar .metismenu>li.active>a {
+            background: #eeeae8;
+        }
+
+        .content-body {
+            background: #eeeae8;
+        }
+
+        .page-titles {
+            background: #eeeae8;
+            padding: 0.9375rem 1.875rem;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #eeeae8;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #866E61;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #866E61;
+        }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+
+<body onload="TimeCount();">
+
+    <!--*******************
+        Preloader start
+    ********************-->
+    <div id="preloader">
+        <div class="loader">
+            <svg class="circular" viewBox="25 25 50 50">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
+            </svg>
+        </div>
+    </div>
+    <!--*******************
+        Preloader end
+    ********************-->
+
+
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
+
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+        <div class="nav-header">
+            <div class="brand-logo">
+                <a href="../Home/Layout">
+                    <b class="logo-abbr"><img src="../media/images/logo-sidadun.png" alt=""></b>
+                    <span class="logo-compact"><img src="../media/images/logo-compact-sidadun.png" alt=""></span>
+                    <span class="brand-title">
+                        <img src="../media/images/logo-compact-sidadun.png" width="200" alt="">
+                    </span>
+                </a>
+            </div>
+        </div>
+        <!--**********************************
+            Nav header end
+        ***********************************-->
+
+        <!--**********************************
+            Header start
+        ***********************************-->
+        <div class="header">
+            <div class="header-content clearfix">
+                <div class="nav-control">
+                    <div class="hamburger">
+                        <span class="toggle-icon"><i class="icon-menu"></i></span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <ul class="clearfix">
+                        <li class="icons dropdown">
+                            <div class="user-img c-pointer position-relative" data-toggle="dropdown">
+                                <span class="activity active"></span>
+                                <img id="photo" src="../media/images/person-circle.svg" height="40" width="40" alt=""
+                                    style="background: #866E61;">
+                            </div>
+                            <div class="drop-down dropdown-profile dropdown-menu">
+                                <div class="dropdown-content-body">
+                                    <ul>
+                                        <li>
+                                            <a disabled><i class="icon-user"></i> <span>使用者資訊</span></a>
+                                        </li>
+                                        <li>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;<span id="name"></span></li>
+                                        <li>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;<span id="permission"></span></li>
+                                        <!-- <li>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;<span id="username"></span></li>
+                                        <li>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;<span id="userid"></span></li>
+                                        <li>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;<span id="deptno"></span></li>
+                                        <li>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;<span id="location"></span></li>
+                                        <li>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;<span id="tel"></span></li> -->
+                                        <hr class="my-2">
+                                        <li>
+                                            <a href="../Login/" onclick="clearAllCookie();">
+                                                <i class="icon-key"></i>
+                                                <span>登出</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+        <!--**********************************
+            Sidebar start
+        ***********************************-->
+        <div class="nk-sidebar">
+            <div class="nk-nav-scroll">
+                <ul class="metismenu" id="menu">
+                    <li class="nav-label">FUNCTION</li>
+                    <li>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon-home menu-icon"></i> <span class="nav-text"><strong>首頁</strong></span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="../Home/Layout">文化館主頁</a></li>
+                            <li><a href="../Home/Dashboard">展區報表</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon-settings menu-icon"></i> <span class="nav-text"><strong>管理</strong></span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="../Management/Area">展區設定</a></li>
+                            <li><a href="../Management/Visitor">訪客設定</a></li>
+                            <li><a href="../Management/Admin">帳號設定</a></li>
+                            <!-- <li><a href="../Management/Live">即時影像</a></li> -->
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+
+            <div id="info" class="row page-titles">
+                <div class="col-lg-6 col-md-6">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">{% block breadcrumb1 %}
+                                {% endblock %}</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">{% block breadcrumb2 %}
+                                {% endblock %}</a></li>
+                    </ol>
+                </div>
+                <div class="col-lg-6 col-md-6" v-show="isDisplay">
+                    <div id="place" class="text-right" style="font-size: 18px;"></div>
+                    <div id="clock" class="text-right" style="font-size: 18px;"></div>
+                </div>
+            </div>
+
+            <div id="app" class="container-fluid">
+                {% block content %}{% endblock %}
+            </div>
+
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        <div class="footer">
+            <div class="copyright">
+                <p>Copyright &copy; AUO Corporation. All Rights Reserved. Designed & Developed by MAMC 2023</p>
+            </div>
+        </div>
+        <!--**********************************
+            Footer end
+        ***********************************-->
+    </div>
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <script src="../media/plugins/common/common.min.js"></script>
+    <script src="../media/js/custom.min.js"></script>
+    <script src="../media/js/settings.js"></script>
+    <script src="../media/js/gleek.js"></script>
+    <script src="../media/js/styleSwitcher.js"></script>
+    <script src="../media/plugins/jquery/jquery.min.js"></script>
+
+    <script type="text/javascript" src="../media/plugins/moment/moment.js"></script>
+    <script type="text/javascript" src="../media/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js">
+    </script>
+    <script type="text/javascript" src="../media/plugins/sweetalert2/sweetalert2@11.js"></script>
+    <script type="text/javascript" src="../media/plugins/tabulator/tabulator.min.js"></script>
+</body>
+
+{% block plugin_script %}{% endblock %}
+
+
+<!-- 登出清除所有cookie -->
+<script type="text/javascript">
+    function clearAllCookie() {
+        var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+        if (keys) {
+            for (var i = keys.length; i--;) {
+                document.cookie = keys[i] + '=0;path=/;expires=' + new Date(0).toUTCString(); //清除当前域名下的,例如：m.kevis.com
+                document.cookie = keys[i] + '=0;path=/;domain=' + document.domain + ';expires=' + new Date(0)
+                    .toUTCString(); //清除当前域名下的，例如 .m.kevis.com
+                document.cookie = keys[i] + '=0;path=/;domain=kevis.com;expires=' + new Date(0)
+                    .toUTCString(); //清除一级域名下的或指定的，例如 .kevis.com
+            }
+        }
+    }
+</script>
+
+
+<!-- 登入者資訊 -->
+<script type="text/javascript">
+    function getCookie(cookieName) {
+        var name = cookieName + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1);
+            if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+        }
+        return "";
+    }
+
+    function CheckPermission() {
+        axios.get('../API/CheckPermission/' + getCookie('name'))
+            .then((response) => {
+                var Permission = response.data
+                // console.log('CheckPermission:', Permission);
+                if (Permission === true) {
+                    document.getElementById('permission').innerHTML = "管理員";
+                } else {
+                    document.getElementById('permission').innerHTML = "一般使用者";
+                }
+            })
+    }
+    document.getElementById('name').innerHTML = getCookie('name');
+    CheckPermission();
+    // document.getElementById('username').innerHTML = getCookie('alias');
+    // document.getElementById('userid').innerHTML = getCookie('userid');
+    // document.getElementById('deptno').innerHTML = getCookie('deptno');
+    // document.getElementById('location').innerHTML = getCookie('location');
+    // document.getElementById('tel').innerHTML = getCookie('tel');
+    // document.getElementById("photo").src = 'http://auohqitmap01/AUOPhoneBookPhoto/photo/' + getCookie('userid') +
+    // '.jpg';
+</script>
+
+
+<!-- 確認是否登入 -->
+<script type="text/javascript">
+    function initCookies() {
+        var cookies = document.cookie;
+        // console.log('initCookies:', cookies);
+        var cookies_userid = getCookie('userid');
+        console.log('cookies_userid:', cookies_userid);
+
+        if (cookies_userid == '') {
+            console.log('No Cookie');
+            Swal.fire({
+                title: "尚未登入",
+                text: "請回到登入畫面進行登入",
+                icon: "info",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.assign("../Login/");
+                }
+            })
+        } else {
+            console.log('With Cookie');
+        }
+    }
+    initCookies();
+</script>
+
+
 <!-- 天氣資訊 -->
 <script type="text/javascript">
     function GetWeather() {
         var Authorization = 'CWB-124CC074-AED6-4C49-98A0-88AA734FD501'
         var StationName = '%E8%A5%BF%E5%B1%AF';
-        var weather_api = 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=' +
-            Authorization + '&StationName=' + StationName + '&elementName=WDSD,TEMP,HUMD'
+        var weather_api = 'https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=' + Authorization + '&StationName=' + StationName + '&elementName=WDSD,TEMP,HUMD'
         axios.get(weather_api)
             .then((response) => {
                 if (response.status == 200) {
@@ -65,3 +411,49 @@
             });
     }
 </script>
+
+
+
+<!-- 動態時鐘 -->
+<script type="text/javascript">
+    function TimeCount() {
+        var today = new Date();
+        var day = today.getDate();
+        var month = today.getMonth() + 1;
+        var year = today.getFullYear();
+        var hour = today.getHours();
+        if (day < 10) day = "0" + day;
+        if (month < 10) month = "0" + month;
+        if (hour < 10) hour = "0" + hour;
+        var minute = today.getMinutes();
+        if (minute < 10) minute = "0" + minute;
+        var second = today.getSeconds();
+        if (second < 10) second = "0" + second;
+        document.getElementById("clock").innerHTML = '<i class="fa fa-clock-o" aria-hidden="true"></i>' +
+            "&nbsp;&nbsp;" + year + "-" + month + "-" + day + "&nbsp;&nbsp;" + hour + ":" + minute + ":" + second;
+        setTimeout("TimeCount()", 1000);
+    }
+</script>
+
+
+<!-- 判斷瀏覽器 -->
+<script type="text/javascript">
+    var lst_browser = ['Chrome', 'Firefox', 'Safari', 'Opera', 'MSIE', 'Trident', 'Edge'];
+    var browser, ua = navigator.userAgent;
+    for (var i = 0; i < lst_browser.length; i++) {
+        if (ua.indexOf(lst_browser[i]) > -1) {
+            browser = lst_browser[i];
+            break;
+        }
+    }
+    if (browser === "MSIE" || browser === "Trident" || browser === "Edge") {
+        browser = "Internet Explorer";
+    }
+    if (browser == 'Internet Explorer') {
+        alert("為使畫面最佳化，請使用Google Chrome開啟");
+    }
+</script>
+
+{% block script %}{% endblock %}
+
+</html>
